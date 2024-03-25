@@ -18,6 +18,7 @@ var router = express.Router();
 
 router.post("/login", loginController);
 router.post("/verifyLogin", UserPrivilegesV2, verifyLogin);
+router.post("/login/resendOTP", UserPrivilegesV2, resendOTP);
 
 router.post("/signup", userSignupController);
 router.post("/resendOTP", UserPrivilegesV3, resendOTP);
