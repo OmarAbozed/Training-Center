@@ -300,7 +300,7 @@ async function forgotPasswordRequestController(req, res) {
     const d = new Date();
     d.setMinutes(d.getMinutes());
     const d2 = new Date();
-    d2.setMinutes(d2.getMinutes() + 1);
+    d2.setMinutes(d2.getMinutes() + 5);
 
     let OTP_Obj = new OTP({
       code: await bcrypt.hash(String(otp), 10),
