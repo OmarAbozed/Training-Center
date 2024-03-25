@@ -27,6 +27,7 @@ async function userSignupController(req, res) {
       linkedin: req.body.linkedin,
     });
     await user.save();
+    await OTP.deleteMany({ email: req.body.email });
     const d1 = new Date();
     d1.setMinutes(d1.getMinutes());
     const d2 = new Date();
@@ -85,7 +86,6 @@ async function userSignupController(req, res) {
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
 }
-
 
 async function resendOTP(req, res) {
   try {
@@ -274,7 +274,7 @@ async function verifyLogin(req, res) {
       return res.status(400).json({ msg: "OTP has expired." });
     }
     await OTP.deleteMany({ email: user.email });
-    let userWithoutPassword = {...user};
+    let userWithoutPassword = { ...user };
     delete userWithoutPassword._doc.password;
     return res.status(200).json(userWithoutPassword._doc);
   } catch (error) {
