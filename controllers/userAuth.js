@@ -142,8 +142,8 @@ async function resendOTP(req, res) {
     await transporter.sendMail(message).catch((err) => {
       throw err;
     });
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_V3, {
-      expiresIn: process.env.JWT_EXPIRE_V3,
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_V2, {
+      expiresIn: process.env.JWT_EXPIRE_V2,
     });
     res.status(201).json({ msg: "code sent..", token: token });
   } catch (error) {
