@@ -12,7 +12,7 @@ async function UserPrivileges(req, res, next) {
       console.log("flag1");
       return res.status(401).json("FORBIDDEN");
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_V);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_V2);
     console.log(decoded._id);
     const user = await User.findById(decoded._id);
     if (!user) {
