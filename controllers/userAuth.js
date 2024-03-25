@@ -348,6 +348,7 @@ async function forgotPasswordRequestController(req, res) {
     });
     res.status(201).json({ msg: "code sent..", token: token });
   } catch (error) {
+    console.log(error)
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
 }
@@ -396,6 +397,7 @@ async function changePassword(req, res) {
     await user.save();
     return res.status(200).json("Password Changed Successfully");
   } catch (error) {
+    console.log(error);
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
 }
