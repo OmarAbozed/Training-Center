@@ -23,6 +23,7 @@ async function UserPrivileges(req, res, next) {
     next();
   } catch (error) {
     console.log("flag3");
+    console.log(error);
     return res.status(401).json("FORBIDDEN");
   }
 }
