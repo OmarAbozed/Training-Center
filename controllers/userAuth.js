@@ -88,7 +88,71 @@ async function userSignupController(req, res) {
   }
 }
 
-async function resendOTP(req, res) {
+async function resendOTPSignup(req, res) {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ error: "user not found.." });
+    }
+    await OTP.deleteMany({ email: user.email });
+    let otp = Math.floor(1000 + Math.random() * 9000);
+    const d = new Date();
+    d.setMinutes(d.getMinutes());
+    const d2 = new Date();
+    d2.setMinutes(d2.getMinutes() + 1);
+
+    let OTP_Obj = new OTP({
+      code: await bcrypt.hash(String(otp), 10),
+      email: user.email,
+      createdAt: Number(d),
+      expiresAt: Number(d2),
+    });
+    await OTP_Obj.save();
+
+    const data = {
+      name: user.name,
+      email: user.email,
+      otp: otp,
+    };
+    const filePath = path.join(
+      __dirname,
+      "..",
+      "public",
+      "mail-template",
+      "index2.ejs"
+    );
+    const fileContent = fs.readFileSync(filePath, "utf8");
+    const modifiedEmailTemplate = ejs.render(fileContent, data);
+    let transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      service: "Gmail",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.NODEMAILER_USER,
+        pass: process.env.NODEMAILER_PASSWORD,
+      },
+    });
+    let message = {
+      from: "Training Center",
+      to: user.email,
+      subject: "Greeting!",
+      html: modifiedEmailTemplate,
+    };
+    await transporter.sendMail(message).catch((err) => {
+      throw err;
+    });
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_V3, {
+      expiresIn: process.env.JWT_EXPIRE_V3,
+    });
+    res.status(201).json({ msg: "code sent..", token: token });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json("INTERNAL SERVER ERROR");
+  }
+}
+
+async function resendOTPLogin(req, res) {
   try {
     const user = await User.findById(req.userId);
     if (!user) {
@@ -404,13 +468,14 @@ async function changePassword(req, res) {
 
 module.exports = {
   userSignupController,
-  resendOTP,
+  resendOTPSignup,
   verifyUser,
   loginController,
   verifyLogin,
   forgotPasswordRequestController,
   verifyForgotPassword,
   changePassword,
+  resendOTPLogin,
 };
 
 /**

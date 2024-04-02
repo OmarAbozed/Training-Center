@@ -1,13 +1,14 @@
 var express = require("express");
 const {
   userSignupController,
-  resendOTP,
+  resendOTPSignup,
   verifyUser,
   loginController,
   verifyLogin,
   changePassword,
   forgotPasswordRequestController,
   verifyForgotPassword,
+  resendOTPLogin,
 } = require("../controllers/userAuth");
 const UserPrivileges = require("../middlewares/protect");
 const UserPrivilegesV2 = require("../middlewares/protectV2");
@@ -18,10 +19,10 @@ var router = express.Router();
 
 router.post("/login", loginController);
 router.post("/verifyLogin", UserPrivilegesV2, verifyLogin);
-router.post("/login/resendOTP", UserPrivilegesV2, resendOTP);
+router.post("/login/resendOTP", UserPrivilegesV2, resendOTPLogin);
 
 router.post("/signup", userSignupController);
-router.post("/resendOTP", UserPrivilegesV3, resendOTP);
+router.post("/resendOTP", UserPrivilegesV3, resendOTPSignup);
 router.post("/verify", UserPrivilegesV3, verifyUser);
 
 router.post("/requestPasswordReset", forgotPasswordRequestController);
