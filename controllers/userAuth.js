@@ -344,7 +344,10 @@ async function verifyLogin(req, res) {
     await OTP.deleteMany({ email: user.email });
     let userWithoutPassword = { ...user };
     delete userWithoutPassword._doc.password;
-    return res.status(200).json(userWithoutPassword._doc);
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRE,
+    });
+    return res.status(200).json({user: userWithoutPassword._doc, token: token});
   } catch (error) {
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
