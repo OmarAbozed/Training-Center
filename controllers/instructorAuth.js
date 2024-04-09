@@ -350,8 +350,8 @@ async function verifyLoginController(req, res) {
     await OTP.deleteMany({ email: instructor.email });
     let instructorWithoutPassword = { ...instructor };
     delete instructorWithoutPassword._doc.password;
-    const token = jwt.sign({ _id: instructor._id }, process.env.JWT_SECRET_V7, {
-      expiresIn: process.env.JWT_EXPIRE_V7,
+    const token = jwt.sign({ _id: instructor._id }, process.env.JWT_SECRET_V8, {
+      expiresIn: process.env.JWT_EXPIRE_V8,
     });
     return res
       .status(200)
