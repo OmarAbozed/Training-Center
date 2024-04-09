@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const userSchema = new mongoose.Schema(
+const instructorSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -21,22 +21,17 @@ const userSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      required: false,
-      default:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW2LMzE3nf64Hl0LCHoOuvmLce3P1UtX3FLZ4jpIcS6g&s",
+      required: true,
     },
-    gender: {
+    title: {
       type: String,
       required: true,
-      enum: ["MALE", "FEMALE", "PREFER NOT TO SAY"],
       minLength: 2,
       maxLength: 255,
     },
-    github: {
-      type: String,
-      required: false,
-      default: "N/A",
-      maxLength: 255,
+    experience: {
+      type: Number,
+      required: true,
     },
     linkedin: {
       type: String,
@@ -44,7 +39,30 @@ const userSchema = new mongoose.Schema(
       default: "N/A",
       maxLength: 255,
     },
+    bio: {
+      type: String,
+      required: true,
+      minLength: 2,
+      maxLength: 255,
+    },
+    ID: {
+      type: String,
+      required: false,
+    },
+    CV: {
+      type: String,
+      required: false,
+    },
+    Graduation_Certificate: {
+      type: String,
+      required: false,
+    },
     verified: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    papers_confirmed: {
       type: Boolean,
       required: false,
       default: false,
@@ -53,6 +71,5 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-
-const User = mongoose.model("User", userSchema);
-exports.User = User;
+const Instructor = mongoose.model("Instructor", instructorSchema);
+exports.Instructor = Instructor;
