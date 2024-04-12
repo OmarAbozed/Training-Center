@@ -19,7 +19,7 @@ async function signupInstructorController(req, res) {
     instructor = new Instructor({
       name: req.body.name,
       email: req.body.email,
-      image: req.file.filename,
+      image: `http://165.232.129.48:3000${req.file.filename}`,
       password: bcrypt.hashSync(req.body.password, 10),
       title: req.body.title,
       experience: req.body.experience,
@@ -368,10 +368,9 @@ async function uploadPapersController(req, res) {
     if (!instructor) {
       return res.status(404).json("Instructor not found");
     }
-    instructor.CV = req.files["CV"][0].filename;
-    instructor.ID = req.files["ID"][0].filename;
-    instructor.Graduation_Certificate =
-      req.files["Graduation_Certificate"][0].filename;
+    instructor.CV = `http://165.232.129.48:3000${req.files["CV"][0].filename}`;
+    instructor.ID = `http://165.232.129.48:3000${req.files["ID"][0].filename}`;
+    instructor.Graduation_Certificate = `http://165.232.129.48:3000${req.files["Graduation_Certificate"][0].filename}`;
 
     await instructor.save();
     return res.status(200).json("Papers Sent");
