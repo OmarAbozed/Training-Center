@@ -25,6 +25,7 @@ async function signupInstructorController(req, res) {
       experience: req.body.experience,
       bio: req.body.bio,
     });
+
     await instructor.save();
     await OTP.deleteMany({ email: req.body.email });
     const d1 = new Date();
@@ -361,6 +362,24 @@ async function verifyLoginController(req, res) {
   }
 }
 
+async function uploadPapersController(req, res) {
+  try {
+    let instructor = await Instructor.findById(req.instructorId);
+    if (!instructor) {
+      return res.status(404).json("Instructor not found");
+    }
+    instructor.CV = req.files["CV"][0].filename;
+    instructor.ID = req.files["ID"][0].filename;
+    instructor.Graduation_Certificate =
+      req.files["Graduation_Certificate"][0].filename;
+
+    await instructor.save();
+    return res.status(200).json("Papers Sent");
+  } catch (error) {
+    return res.status(500).json("INTERNAL SERVER ERROR");
+  }
+}
+
 module.exports = {
   signupInstructorController,
   signupResendOTPController,
@@ -368,4 +387,5 @@ module.exports = {
   loginInstructorController,
   resendLoginOTPController,
   verifyLoginController,
+  uploadPapersController,
 };

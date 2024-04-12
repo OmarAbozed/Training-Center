@@ -6,6 +6,7 @@ const {
   loginInstructorController,
   resendLoginOTPController,
   verifyLoginController,
+  uploadPapersController,
 } = require("../controllers/instructorAuth");
 var router = express.Router();
 const upload = require("../utils/uploadImage");
@@ -21,8 +22,6 @@ router.post(
 );
 router.post("/signup/verify", InstructorPrivileges, verifySignupController);
 
-
-
 router.post("/login", loginInstructorController);
 router.post(
   "/login/resendOTP",
@@ -30,5 +29,15 @@ router.post(
   resendLoginOTPController
 );
 router.post("/login/verify", InstructorPrivilegesV2, verifyLoginController);
+router.post(
+  "/uploadPapers",
+  upload.fields([
+    { name: "CV", maxCount: 1 },
+    { name: "ID", maxCount: 1 },
+    { name: "Graduation_Certificate", maxCount: 1 },
+  ]),
+  InstructorPrivilegesV3,
+  uploadPapersController
+);
 
 module.exports = router;

@@ -36,7 +36,6 @@ const instructorSchema = new mongoose.Schema(
     linkedin: {
       type: String,
       required: false,
-      default: "N/A",
       maxLength: 255,
     },
     bio: {
@@ -66,6 +65,15 @@ const instructorSchema = new mongoose.Schema(
       type: Boolean,
       required: false,
       default: false,
+    },
+    rejected: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    rejectComment: {
+      type: String,
+      required: false,
     },
   },
   { timestamps: true }

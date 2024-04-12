@@ -10,6 +10,7 @@ require("dotenv").config();
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var instructorsRouter = require("./routes/instructors");
+var adminRouter = require("./routes/admin");
 
 /* Database Connection */
 mongoose
@@ -39,6 +40,7 @@ app.use(express.static(path.join(__dirname, "uploads")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/instructors", instructorsRouter);
+app.use("/admin", adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
