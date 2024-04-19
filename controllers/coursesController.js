@@ -19,7 +19,7 @@ async function addCourseController(req, res) {
       instructorId: req.instructorId,
       level: req.body.level,
       slug: req.body.title.trim().split(" ").join("").toLowerCase(),
-      keywords: req.body.keywords,
+      keywords: req.body.keywords.map((keyword)=> keyword.toLowerCase()),
     });
     await course.save();
     return res.status(200).json(course);
@@ -35,6 +35,7 @@ async function getCoursesController(req, res) {
     const search = req.query.search || "";
     let sort = req.query.sort || "rating";
     let topics = req.query.topics || "All";
+    let keywords = req.query.keywords || "";
 
     const courses = await Course.find({}, { topics: 1, keywords: 1 });
     const uniqueWords = new Set();
@@ -59,8 +60,13 @@ async function getCoursesController(req, res) {
       sortBy[sort[0]] = "asc";
     }
 
+    const keywordQuery = keywords
+      ? { keywords: { $in: keywords } }
+      : {};
+
     const searchResults = await Course.find({
       title: { $regex: search, $options: "i" },
+      ...keywordQuery,
     })
       .where("topics")
       .in([...topics])
@@ -71,6 +77,7 @@ async function getCoursesController(req, res) {
     const total = await Course.countDocuments({
       topics: { $in: [...topics] },
       title: { $regex: search, $options: "i" },
+      ...keywordQuery,
     });
 
     const response = {
@@ -86,6 +93,7 @@ async function getCoursesController(req, res) {
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
 }
+
 async function getCourseById(req, res) {
   try {
     const course = await Course.findById(req.params.id).populate(
