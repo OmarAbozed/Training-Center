@@ -13,6 +13,8 @@ const upload = require("../utils/uploadImage");
 const InstructorPrivileges = require("../middlewares/protectV6");
 const InstructorPrivilegesV2 = require("../middlewares/protectV7");
 const InstructorPrivilegesV3 = require("../middlewares/protectV8");
+const instructorConfirmedCheck = require("../middlewares/instructorConfirmed");
+const { addCourseController } = require("../controllers/coursesController");
 
 router.post("/signup", upload.single("image"), signupInstructorController);
 router.post(
@@ -38,6 +40,13 @@ router.post(
   ]),
   InstructorPrivilegesV3,
   uploadPapersController
+);
+router.post(
+  "/courses/add",
+  upload.single("image"),
+  InstructorPrivilegesV3,
+  instructorConfirmedCheck,
+  addCourseController
 );
 
 module.exports = router;
