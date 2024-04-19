@@ -7,6 +7,7 @@ const {
   resendLoginOTPController,
   verifyLoginController,
   uploadPapersController,
+  updateInstructorController,
 } = require("../controllers/instructorAuth");
 var router = express.Router();
 const upload = require("../utils/uploadImage");
@@ -14,7 +15,10 @@ const InstructorPrivileges = require("../middlewares/protectV6");
 const InstructorPrivilegesV2 = require("../middlewares/protectV7");
 const InstructorPrivilegesV3 = require("../middlewares/protectV8");
 const instructorConfirmedCheck = require("../middlewares/instructorConfirmed");
-const { addCourseController } = require("../controllers/coursesController");
+const {
+  addCourseController,
+  updateCourseController,
+} = require("../controllers/coursesController");
 
 router.post("/signup", upload.single("image"), signupInstructorController);
 router.post(
@@ -41,12 +45,28 @@ router.post(
   InstructorPrivilegesV3,
   uploadPapersController
 );
+
+router.patch(
+  "/updateProfile",
+  upload.single("image"),
+  InstructorPrivilegesV3,
+  instructorConfirmedCheck,
+  updateInstructorController
+);
 router.post(
   "/courses/add",
   upload.single("image"),
   InstructorPrivilegesV3,
   instructorConfirmedCheck,
   addCourseController
+);
+
+router.patch(
+  "/courses/update/:id",
+  upload.single("image"),
+  InstructorPrivilegesV3,
+  instructorConfirmedCheck,
+  updateCourseController
 );
 
 module.exports = router;

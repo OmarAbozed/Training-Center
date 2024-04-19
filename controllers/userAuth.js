@@ -469,6 +469,45 @@ async function changePassword(req, res) {
   }
 }
 
+async function updateUserController(req, res) {
+  try {
+    let user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json("user not found");
+    }
+
+    if (req.file) {
+      req.body.image = `http://165.232.129.48:3000/${req.file.filename}`;
+    }
+
+    if (req.body.password) {
+      req.body.password = bcrypt.hashSync(req.body.password, 10);
+    }
+
+    if (
+      req.body.verified
+    ) {
+      return res.status(401).json("FORBIDDEN");
+    }
+
+    let updatedUser = await User.findByIdAndUpdate(
+      req.userId,
+      req.body
+    );
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      let errors = {};
+      Object.keys(error.errors).forEach((key) => {
+        errors[key] = error.errors[key].message;
+      });
+      return res.status(400).send(errors);
+    }
+    return res.status(500).json("INTERNAL SERVER ERROR");
+  }
+}
+
+
 module.exports = {
   userSignupController,
   resendOTPSignup,
@@ -479,6 +518,7 @@ module.exports = {
   verifyForgotPassword,
   changePassword,
   resendOTPLogin,
+  updateUserController,
 };
 
 /**

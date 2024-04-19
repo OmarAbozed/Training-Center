@@ -379,6 +379,47 @@ async function uploadPapersController(req, res) {
   }
 }
 
+async function updateInstructorController(req, res) {
+  try {
+    let instructor = await Instructor.findById(req.instructorId);
+    if (!instructor) {
+      return res.status(404).json("instructor not found");
+    }
+
+    if (req.file) {
+      req.body.image = `http://165.232.129.48:3000/${req.file.filename}`;
+    }
+
+    if (req.body.password) {
+      req.body.password = bcrypt.hashSync(req.body.password, 10);
+    }
+
+    if (
+      req.body.verified ||
+      req.body.ID ||
+      req.body.CV ||
+      req.body.Graduation_Certificate ||
+      req.body.papers_confirmed ||
+      req.body.rejected ||
+      req.body.rejectComment
+    ) {
+      return res.status(401).json("FORBIDDEN")
+    }
+
+    let updatedInstructor = await Instructor.findByIdAndUpdate(req.instructorId, req.body);
+    return res.status(200).json(updatedInstructor);
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      let errors = {};
+      Object.keys(error.errors).forEach((key) => {
+        errors[key] = error.errors[key].message;
+      });
+      return res.status(400).send(errors);
+    }
+    return res.status(500).json("INTERNAL SERVER ERROR");
+  }
+}
+
 module.exports = {
   signupInstructorController,
   signupResendOTPController,
@@ -387,4 +428,5 @@ module.exports = {
   resendLoginOTPController,
   verifyLoginController,
   uploadPapersController,
+  updateInstructorController,
 };

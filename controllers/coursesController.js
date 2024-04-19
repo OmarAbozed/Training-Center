@@ -18,12 +18,20 @@ async function addCourseController(req, res) {
       language: req.body.language,
       instructorId: req.instructorId,
       level: req.body.level,
-      slug: req.body.title.trim().split(" ").join("").toLowerCase(),
-      keywords: req.body.keywords.map((keyword)=> keyword.toLowerCase()),
+      slug: req.body.title ? req.body.title.trim().split(" ").join("").toLowerCase() : null,
+      keywords: req.body.keywords.map((keyword) => keyword.toLowerCase()),
     });
     await course.save();
     return res.status(200).json(course);
   } catch (error) {
+    if (error.name === "ValidationError") {
+      let errors = {};
+      Object.keys(error.errors).forEach((key) => {
+        errors[key] = error.errors[key].message;
+      });
+      return res.status(400).send(errors);
+    }
+    console.log(error)
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
 }
@@ -60,9 +68,7 @@ async function getCoursesController(req, res) {
       sortBy[sort[0]] = "asc";
     }
 
-    const keywordQuery = keywords
-      ? { keywords: { $in: keywords } }
-      : {};
+    const keywordQuery = keywords ? { keywords: { $in: keywords } } : {};
 
     const searchResults = await Course.find({
       title: { $regex: search, $options: "i" },
@@ -96,14 +102,62 @@ async function getCoursesController(req, res) {
 
 async function getCourseById(req, res) {
   try {
+    if (!req.params.id) {
+      return res.status(400).json("Please provide a valid id");
+    }
     const course = await Course.findById(req.params.id).populate(
       "instructorId"
     );
+    if (!course) {
+      return res.status(404).json("Course not found");
+    }
     return res.status(200).json(course);
   } catch (error) {
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
 }
+
+async function updateCourseController(req, res) {
+  try {
+    let course = await Course.findById(req.params.id);
+    if (!course) {
+      return res.status(404).json("Course not found");
+    }
+
+    if (req.file) {
+      req.body.image = `http://165.232.129.48:3000/${req.file.filename}`;
+    }
+
+    for (let key in req.body) {
+      if (Array.isArray(course[key]) && Array.isArray(req.body[key])) {
+        const mergedArray = [...course[key], ...req.body[key]];
+        course[key] = [...new Set(mergedArray)];
+      } else if (Array.isArray(course[key]) && req.body[key] === null) {
+        course[key] = [];
+      } else if (Array.isArray(course[key]) && req.body[key] !== undefined) {
+        course[key] = course[key].filter(
+          (item) => !req.body[key].includes(item)
+        );
+      } else {
+        course[key] = req.body[key];
+      }
+    }
+
+    let updatedCourse = await course.save();
+    return res.status(200).json(updatedCourse);
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      let errors = {};
+      Object.keys(error.errors).forEach((key) => {
+        errors[key] = error.errors[key].message;
+      });
+      return res.status(400).send(errors);
+    }
+    return res.status(500).json("INTERNAL SERVER ERROR");
+  }
+}
+
+
 
 // const seedCourses = async () => {
 //   try {
@@ -120,4 +174,9 @@ async function getCourseById(req, res) {
 //   .then((docs) => console.log(docs))
 //   .catch((err) => console.log(err));
 
-module.exports = { addCourseController, getCoursesController, getCourseById };
+module.exports = {
+  addCourseController,
+  getCoursesController,
+  getCourseById,
+  updateCourseController,
+};
