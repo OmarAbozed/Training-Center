@@ -20,7 +20,14 @@ const {
   getCoursesController,
   getCourseById,
 } = require("../controllers/coursesController");
-const upload = require("../utils/uploadImage")
+const upload = require("../utils/uploadImage");
+const {
+  getCartController,
+  addToCartController,
+  removeItemFromCartController,
+  checkoutCartController,
+  paymentHandler,
+} = require("../controllers/shoppingCourses");
 var router = express.Router();
 
 router.post("/login", loginController);
@@ -35,10 +42,22 @@ router.post("/requestPasswordReset", forgotPasswordRequestController);
 router.post("/verifyResetPassword", UserPrivilegesV4, verifyForgotPassword);
 router.post("/changePassword", UserPrivilegesV5, changePassword);
 
-router.patch("/updateProfile", upload.single("image"), UserPrivileges, updateUserController);
+router.patch(
+  "/updateProfile",
+  upload.single("image"),
+  UserPrivileges,
+  updateUserController
+);
 
 router.get("/courses", getCoursesController);
 router.get("/courses/:id", getCourseById);
+
+router.get("/cart", UserPrivileges, getCartController);
+router.post("/cart/:id", UserPrivileges, addToCartController);
+router.delete("/cart/:id", UserPrivileges, removeItemFromCartController);
+router.get("/cart/checkout/:id", checkoutCartController);
+// router.get("/cart/checkout", checkoutCartController);
+router.post("/payment", paymentHandler);
 
 /** MAIL TEMPLATE */
 // router.get("/", (req, res) => {

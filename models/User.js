@@ -44,6 +44,30 @@ const userSchema = new mongoose.Schema(
       default: "N/A",
       maxLength: 255,
     },
+    wishlist: {
+      type: [mongoose.Schema.ObjectId],
+      ref: "Course",
+      required: false,
+      default: [],
+    },
+    cart: {
+      type: [mongoose.Schema.ObjectId],
+      ref: "Course",
+      required: false,
+      default: [],
+    },
+    favorite: {
+      type: [mongoose.Schema.ObjectId],
+      ref: "Course",
+      required: false,
+      default: [],
+    },
+    courses: {
+      type: [mongoose.Schema.ObjectId],
+      ref: "Course",
+      required: false,
+      default: [],
+    },
     verified: {
       type: Boolean,
       required: false,
@@ -52,7 +76,6 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
 
 const User = mongoose.model("User", userSchema);
 exports.User = User;

@@ -1,0 +1,8 @@
+doctype html
+html
+  head
+    title Stripe Payment
+  body
+    h3 Welcome to Payment Gateway
+    form(action="/users/payment", method="GET")
+      script.stripe-button(src="//checkout.stripe.com/v2/checkout.js", data-key=key, data-amount=totalPrice, data-currency="usd", data-name=username, data-description="Course Payment", data-locale="auto")
