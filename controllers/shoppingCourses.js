@@ -139,6 +139,7 @@ async function handlePayment(req, res, next) {
     );
     let response = await request.json();
     req.id = response.id;
+    console.log("Response: ", response);
     next();
   } catch (error) {
     console.log(error);
@@ -192,6 +193,7 @@ async function paymentUserEndPoint(req, res) {
       }
     );
     await Order.deleteMany({ user_id: req.userId });
+    console.log("order id: ", req.id);
     const transaction = new Order({
       order_id: req.id,
       total_price: req.order.totalPrice,
