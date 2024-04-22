@@ -19,7 +19,7 @@ async function signupInstructorController(req, res) {
     instructor = new Instructor({
       name: req.body.name,
       email: req.body.email,
-      image: `http://165.232.129.48:3000/${req.file.filename}`,
+      image: `https://165.232.129.48:3000/${req.file.filename}`,
       password: bcrypt.hashSync(req.body.password, 10),
       title: req.body.title,
       experience: req.body.experience,
@@ -368,9 +368,9 @@ async function uploadPapersController(req, res) {
     if (!instructor) {
       return res.status(404).json("Instructor not found");
     }
-    instructor.CV = `http://165.232.129.48:3000/${req.files["CV"][0].filename}`;
-    instructor.ID = `http://165.232.129.48:3000/${req.files["ID"][0].filename}`;
-    instructor.Graduation_Certificate = `http://165.232.129.48:3000/${req.files["Graduation_Certificate"][0].filename}`;
+    instructor.CV = `https://165.232.129.48:3000/${req.files["CV"][0].filename}`;
+    instructor.ID = `https://165.232.129.48:3000/${req.files["ID"][0].filename}`;
+    instructor.Graduation_Certificate = `https://165.232.129.48:3000/${req.files["Graduation_Certificate"][0].filename}`;
 
     await instructor.save();
     return res.status(200).json("Papers Sent");
@@ -387,7 +387,7 @@ async function updateInstructorController(req, res) {
     }
 
     if (req.file) {
-      req.body.image = `http://165.232.129.48:3000/${req.file.filename}`;
+      req.body.image = `https://165.232.129.48:3000/${req.file.filename}`;
     }
 
     if (req.body.password) {
@@ -403,10 +403,13 @@ async function updateInstructorController(req, res) {
       req.body.rejected ||
       req.body.rejectComment
     ) {
-      return res.status(401).json("FORBIDDEN")
+      return res.status(401).json("FORBIDDEN");
     }
 
-    let updatedInstructor = await Instructor.findByIdAndUpdate(req.instructorId, req.body);
+    let updatedInstructor = await Instructor.findByIdAndUpdate(
+      req.instructorId,
+      req.body
+    );
     return res.status(200).json(updatedInstructor);
   } catch (error) {
     if (error.name === "ValidationError") {

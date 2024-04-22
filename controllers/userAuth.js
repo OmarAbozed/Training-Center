@@ -347,7 +347,9 @@ async function verifyLogin(req, res) {
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE,
     });
-    return res.status(200).json({user: userWithoutPassword._doc, token: token});
+    return res
+      .status(200)
+      .json({ user: userWithoutPassword._doc, token: token });
   } catch (error) {
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
@@ -415,7 +417,7 @@ async function forgotPasswordRequestController(req, res) {
     });
     res.status(201).json({ msg: "code sent..", token: token });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
 }
@@ -444,7 +446,9 @@ async function verifyForgotPassword(req, res) {
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_V5, {
       expiresIn: process.env.JWT_EXPIRE_V5,
     });
-    return res.status(200).json({ msg: "Proceed to change your password", token: token });
+    return res
+      .status(200)
+      .json({ msg: "Proceed to change your password", token: token });
   } catch (error) {
     console.log(error);
     return res.status(500).json("INTERNAL SERVER ERROR");
@@ -477,23 +481,18 @@ async function updateUserController(req, res) {
     }
 
     if (req.file) {
-      req.body.image = `http://165.232.129.48:3000/${req.file.filename}`;
+      req.body.image = `https://165.232.129.48:3000/${req.file.filename}`;
     }
 
     if (req.body.password) {
       req.body.password = bcrypt.hashSync(req.body.password, 10);
     }
 
-    if (
-      req.body.verified
-    ) {
+    if (req.body.verified) {
       return res.status(401).json("FORBIDDEN");
     }
 
-    let updatedUser = await User.findByIdAndUpdate(
-      req.userId,
-      req.body
-    );
+    let updatedUser = await User.findByIdAndUpdate(req.userId, req.body);
     return res.status(200).json(updatedUser);
   } catch (error) {
     if (error.name === "ValidationError") {
@@ -506,7 +505,6 @@ async function updateUserController(req, res) {
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
 }
-
 
 module.exports = {
   userSignupController,

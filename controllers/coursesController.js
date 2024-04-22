@@ -6,7 +6,7 @@ async function addCourseController(req, res) {
     const course = new Course({
       title: req.body.title,
       subtitle: req.body.title,
-      image: `http://165.232.129.48:3000/${req.file.filename}`,
+      image: `https://165.232.129.48:3000/${req.file.filename}`,
       description: req.body.description,
       topics: req.body.topics.map((topic) => topic.toLowerCase()),
       duration: req.body.duration,
@@ -18,7 +18,9 @@ async function addCourseController(req, res) {
       language: req.body.language,
       instructorId: req.instructorId,
       level: req.body.level,
-      slug: req.body.title ? req.body.title.trim().split(" ").join("").toLowerCase() : null,
+      slug: req.body.title
+        ? req.body.title.trim().split(" ").join("").toLowerCase()
+        : null,
       keywords: req.body.keywords.map((keyword) => keyword.toLowerCase()),
     });
     await course.save();
@@ -31,7 +33,7 @@ async function addCourseController(req, res) {
       });
       return res.status(400).send(errors);
     }
-    console.log(error)
+    console.log(error);
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
 }
@@ -125,7 +127,7 @@ async function updateCourseController(req, res) {
     }
 
     if (req.file) {
-      req.body.image = `http://165.232.129.48:3000/${req.file.filename}`;
+      req.body.image = `https://165.232.129.48:3000/${req.file.filename}`;
     }
 
     for (let key in req.body) {
@@ -156,8 +158,6 @@ async function updateCourseController(req, res) {
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
 }
-
-
 
 // const seedCourses = async () => {
 //   try {
