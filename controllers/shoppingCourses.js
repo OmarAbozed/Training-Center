@@ -100,6 +100,7 @@ async function checkoutCartController(req, res, next) {
     req.token = response.token;
     next();
   } catch (error) {
+    console.log(error);
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
 }
