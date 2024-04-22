@@ -30,6 +30,16 @@ const {
   paymentUserEndPoint,
   paymentSuccess,
 } = require("../controllers/shoppingCourses");
+const {
+  getFavController,
+  addToFavController,
+  removeFavController,
+} = require("../controllers/favoriteCoursesController");
+const {
+  getWishlistController,
+  addToWishlistController,
+  removeFromWishlistController,
+} = require("../controllers/wishlistController");
 var router = express.Router();
 
 router.post("/login", loginController);
@@ -64,6 +74,14 @@ router.get(
   handlePayment,
   paymentUserEndPoint
 );
+
+router.get("/favorite", UserPrivileges, getFavController);
+router.post("/favorite/:id", UserPrivileges, addToFavController);
+router.delete("/favorite/:id", UserPrivileges, removeFavController);
+
+router.get("/wishlist", UserPrivileges, getWishlistController);
+router.post("/wishlist/:id", UserPrivileges, addToWishlistController);
+router.delete("/wishlist/:id", UserPrivileges, removeFromWishlistController);
 
 router.get("/success", paymentSuccess);
 
