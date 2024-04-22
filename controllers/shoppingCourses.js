@@ -75,7 +75,7 @@ async function removeItemFromCartController(req, res) {
 async function checkoutCartController(req, res, next) {
   try {
     let data = {
-      api_key: process.env.PAYMOB_API_KEY,
+      // api_key: process.env.PAYMOB_API_KEY,
       api_key:
         "ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2T1RJd05UWXlMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkua2haVkU1TUpjeTVYcHpwMEI2UC1jSGZqd0NrckFTUGhMckwwRGJReWNjcGpJUkhoMnpiSlN6UEdBWW82dXZWc3FRVWRLUlJaVTVkeTFyZkxuaGJvQ2c=",
     };
