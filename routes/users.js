@@ -40,6 +40,9 @@ const {
   addToWishlistController,
   removeFromWishlistController,
 } = require("../controllers/wishlistController");
+const {
+  getMyCoursesController,
+} = require("../controllers/userCoursesController");
 var router = express.Router();
 
 router.post("/login", loginController);
@@ -74,6 +77,7 @@ router.get(
   handlePayment,
   paymentUserEndPoint
 );
+router.get("/success", paymentSuccess);
 
 router.get("/favorite", UserPrivileges, getFavController);
 router.post("/favorite/:id", UserPrivileges, addToFavController);
@@ -83,7 +87,7 @@ router.get("/wishlist", UserPrivileges, getWishlistController);
 router.post("/wishlist/:id", UserPrivileges, addToWishlistController);
 router.delete("/wishlist/:id", UserPrivileges, removeFromWishlistController);
 
-router.get("/success", paymentSuccess);
+router.get("/courses", UserPrivileges, getMyCoursesController);
 
 /** MAIL TEMPLATE */
 // router.get("/", (req, res) => {
