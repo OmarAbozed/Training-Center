@@ -21,8 +21,6 @@ app.set("port", port);
  * Create HTTP server.
  */
 
-console.log(path.join(__dirname, "..", "cert", "key.pem"))
-
 var server = https.createServer(
   {
     key: fs.readFileSync(path.join(__dirname, "..", "cert", "key.pem")),

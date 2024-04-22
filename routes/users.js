@@ -26,7 +26,9 @@ const {
   addToCartController,
   removeItemFromCartController,
   checkoutCartController,
-  paymentHandler,
+  handlePayment,
+  paymentUserEndPoint,
+  paymentSuccess,
 } = require("../controllers/shoppingCourses");
 var router = express.Router();
 
@@ -55,9 +57,15 @@ router.get("/courses/:id", getCourseById);
 router.get("/cart", UserPrivileges, getCartController);
 router.post("/cart/:id", UserPrivileges, addToCartController);
 router.delete("/cart/:id", UserPrivileges, removeItemFromCartController);
-router.get("/cart/checkout/:id", checkoutCartController);
-// router.get("/cart/checkout", checkoutCartController);
-router.post("/payment", paymentHandler);
+router.get(
+  "/cart/checkout",
+  UserPrivileges,
+  checkoutCartController,
+  handlePayment,
+  paymentUserEndPoint
+);
+
+router.get("/success", paymentSuccess);
 
 /** MAIL TEMPLATE */
 // router.get("/", (req, res) => {

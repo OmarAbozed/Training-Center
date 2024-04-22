@@ -73,9 +73,9 @@ const courseSchema = new mongoose.Schema(
       minLength: 2,
       maxLength: 255,
     },
-    level:{
-        type: String,
-        required: true
+    level: {
+      type: String,
+      required: true,
     },
     instructorId: {
       type: mongoose.Schema.ObjectId,
@@ -94,13 +94,24 @@ const courseSchema = new mongoose.Schema(
       default: 0,
     },
     slug: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
-    keywords:{
-        type: [String],
-        required: false
-    }
+    keywords: {
+      type: [String],
+      required: false,
+    },
+    sellings: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    students: {
+      type: [mongoose.Schema.ObjectId],
+      required: false,
+      default: [],
+      ref: "User",
+    },
   },
   { timestamps: true }
 );
