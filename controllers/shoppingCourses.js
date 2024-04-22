@@ -12,6 +12,9 @@ async function addToCartController(req, res) {
     if (user.cart.includes(req.params.id)) {
       return res.status(400).json("Already In Cart");
     }
+    if (user.courses.includes(req.params.id)) {
+      return res.status(400).json("Already In Courses");
+    }
     user.cart.push(req.params.id);
     await user.save();
     let cart = await User.findById(req.userId).populate("cart").select("cart");
