@@ -141,6 +141,7 @@ async function handlePayment(req, res, next) {
     req.id = response.id;
     next();
   } catch (error) {
+    console.log(error);
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
 }
@@ -203,6 +204,7 @@ async function paymentUserEndPoint(req, res) {
     let url = `https://accept.paymob.com/api/acceptance/iframes/793481?payment_token=${response.token}`;
     return res.status(200).json(url);
   } catch (error) {
+    console.log(error);
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
 }
@@ -233,6 +235,7 @@ async function paymentSuccess(req, res) {
     await user.save();
     return res.redirect("https://skillify-center.netlify.app/confirmation");
   } catch (error) {
+    console.log(error);
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
 }
