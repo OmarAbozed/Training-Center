@@ -18,6 +18,7 @@ const instructorConfirmedCheck = require("../middlewares/instructorConfirmed");
 const {
   addCourseController,
   updateCourseController,
+  getInstructorCoursesController,
 } = require("../controllers/coursesController");
 
 router.post("/signup", upload.single("image"), signupInstructorController);
@@ -59,6 +60,13 @@ router.post(
   InstructorPrivilegesV3,
   instructorConfirmedCheck,
   addCourseController
+);
+
+router.get(
+  "/courses",
+  InstructorPrivilegesV3,
+  instructorConfirmedCheck,
+  getInstructorCoursesController
 );
 
 router.patch(
