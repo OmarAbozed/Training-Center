@@ -87,7 +87,7 @@ router.get("/wishlist", UserPrivileges, getWishlistController);
 router.post("/wishlist/:id", UserPrivileges, addToWishlistController);
 router.delete("/wishlist/:id", UserPrivileges, removeFromWishlistController);
 
-router.get("/courses", UserPrivileges, getMyCoursesController);
+router.get("/myCourses", UserPrivileges, getMyCoursesController);
 
 /** MAIL TEMPLATE */
 // router.get("/", (req, res) => {
