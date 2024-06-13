@@ -161,10 +161,8 @@ async function updateCourseController(req, res) {
 
 async function getInstructorCoursesController(req, res) {
   try {
-    console.log(req.userId)
-    const courses = await Course.find({ instructorId: req.userId });
+    const courses = await Course.find({ instructorId: req.instructorId });
     if (!courses[0]) {
-      console.log(courses)
       return res.status(404).json("No Courses Available");
     }
     return res.status(200).json(courses);
