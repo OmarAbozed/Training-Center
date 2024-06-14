@@ -10,11 +10,12 @@ async function addContentController(req, res) {
     const content = new Content({
       courseId: course._id,
       title: req.body.title,
-      media: `https://165.232.129.48:3000/${req.file.filename}`,
+      media: `https://165.232.129.48:3000/${req.files[0].filename}`,
     });
     await content.save();
     return res.status(201).json(content);
   } catch (error) {
+    console.log(error)
     return res.status(500).json("INTERNAL SERVER ERROR");
   }
 }
