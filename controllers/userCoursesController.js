@@ -1,3 +1,5 @@
+const { Course } = require("../models/Course");
+const { Content } = require("../models/CourseContent");
 const { User } = require("../models/User");
 
 async function getMyCoursesController(req, res) {
@@ -15,4 +17,24 @@ async function getMyCoursesController(req, res) {
   }
 }
 
-module.exports = { getMyCoursesController };
+async function getCourseContentController(req, res) {
+  try {
+    const course = await Course.findById(req.params.id);
+    if (!course) {
+      return res.status(404).json("Course Not Found");
+    }
+    const user = await User.findById(req.userId);
+    if (!(course._id in user.courses)) {
+      return res.status(401).json("This Course is not on your list");
+    }
+    const content = await Content.find({ courseId: course._id });
+    if (!content[0]) {
+      return res.status(404).json("No Content Available");
+    }
+    return res.status(200).json(content);
+  } catch (error) {
+    return res.status(500).json("INTERNAL SERVER ERROR");
+  }
+}
+
+module.exports = { getMyCoursesController, getCourseContentController };

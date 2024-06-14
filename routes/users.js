@@ -42,6 +42,7 @@ const {
 } = require("../controllers/wishlistController");
 const {
   getMyCoursesController,
+  getCourseContentController,
 } = require("../controllers/userCoursesController");
 var router = express.Router();
 
@@ -66,6 +67,8 @@ router.patch(
 
 router.get("/courses", getCoursesController);
 router.get("/courses/:id", getCourseById);
+
+router.get("/courses/content/:id", UserPrivileges, getCourseContentController);
 
 router.get("/cart", UserPrivileges, getCartController);
 router.post("/cart/:id", UserPrivileges, addToCartController);
