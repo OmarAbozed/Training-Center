@@ -20,6 +20,10 @@ const {
   updateCourseController,
   getInstructorCoursesController,
 } = require("../controllers/coursesController");
+const {
+  getCourseContentController,
+  addContentController,
+} = require("../controllers/courseContentInstructor");
 
 router.post("/signup", upload.single("image"), signupInstructorController);
 router.post(
@@ -75,6 +79,21 @@ router.patch(
   InstructorPrivilegesV3,
   instructorConfirmedCheck,
   updateCourseController
+);
+
+router.get(
+  "/courses/content/:id",
+  InstructorPrivilegesV3,
+  instructorConfirmedCheck,
+  getCourseContentController
+);
+
+router.post(
+  "/courses/content/:id",
+  upload.any(),
+  InstructorPrivilegesV3,
+  instructorConfirmedCheck,
+  addContentController
 );
 
 module.exports = router;
