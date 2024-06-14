@@ -24,7 +24,7 @@ async function getCourseContentController(req, res) {
       return res.status(404).json("Course Not Found");
     }
     const user = await User.findById(req.userId);
-    if (!(course._id in user.courses)) {
+    if (!user.courses.includes(course._id)) {
       return res.status(401).json("This Course is not on your list");
     }
     const content = await Content.find({ courseId: course._id });
