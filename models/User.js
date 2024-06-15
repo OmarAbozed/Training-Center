@@ -44,6 +44,10 @@ const userSchema = new mongoose.Schema(
       default: "N/A",
       maxLength: 255,
     },
+    phone: {
+      type: String,
+      required: false,
+    },
     wishlist: {
       type: [mongoose.Schema.ObjectId],
       ref: "Course",
