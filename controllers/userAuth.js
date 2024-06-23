@@ -493,7 +493,10 @@ async function updateUserController(req, res) {
     }
 
     let updatedUser = await User.findByIdAndUpdate(req.userId, req.body);
-    return res.status(200).json(updatedUser);
+    let newUser = await User.findById(req.userId);
+    let userWithoutPassword = { ...newUser };
+    delete userWithoutPassword._doc.password;
+    return res.status(200).json(userWithoutPassword._doc);
   } catch (error) {
     if (error.name === "ValidationError") {
       let errors = {};
