@@ -498,6 +498,7 @@ async function updateUserController(req, res) {
     delete userWithoutPassword._doc.password;
     return res.status(200).json(userWithoutPassword._doc);
   } catch (error) {
+    console.log(error);
     if (error.name === "ValidationError") {
       let errors = {};
       Object.keys(error.errors).forEach((key) => {
