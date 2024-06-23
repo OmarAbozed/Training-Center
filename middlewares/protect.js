@@ -13,7 +13,7 @@ async function UserPrivileges(req, res, next) {
       return res.status(401).json("FORBIDDEN");
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded._id)
+    console.log(decoded._id);
     const user = await User.findById(decoded._id);
     if (!user) {
       console.log("flag2");
@@ -23,6 +23,7 @@ async function UserPrivileges(req, res, next) {
     next();
   } catch (error) {
     console.log("flag3");
+    console.log(error);
     return res.status(401).json("FORBIDDEN");
   }
 }
