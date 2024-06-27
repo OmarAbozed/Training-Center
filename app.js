@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: "*",
+    origin: ["127.0.0.1:3000", "skillify-center.netlify.app"],
     credentials: true,
   })
 );
