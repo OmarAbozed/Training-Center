@@ -4,12 +4,13 @@ const {
   acceptApplicationsController,
   rejectApplicationsController,
 } = require("../controllers/adminDashboard");
-const { adminLogin } = require("../controllers/adminAuth");
+const { adminLogin, adminVerifyLogin } = require("../controllers/adminAuth");
 const AdminPrivileges = require("../middlewares/adminPrivileges");
 
 var router = express.Router();
 
 router.post("/login", adminLogin);
+router.post("/verifyLogin", AdminPrivileges, adminVerifyLogin);
 router.get("/applications", AdminPrivileges, getApplicationsController);
 router.patch(
   "/applications/approve/:id",
