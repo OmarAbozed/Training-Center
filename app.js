@@ -19,6 +19,12 @@ mongoose
   .catch((err) => console.error("MongoDB Connection Failed..", err));
 
 var app = express();
+
+app.use((req, res, next) => {
+  console.log("ip: ", req.ip);
+  next();
+});
+
 app.use(
   cors({
     origin: "*",
