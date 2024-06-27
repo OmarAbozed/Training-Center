@@ -27,7 +27,7 @@ app.use(
 );
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.log(err.stack);
   res.status(500).send("Something broke!");
 });
 
