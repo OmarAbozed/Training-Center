@@ -4,7 +4,9 @@ async function getApplicationsController(req, res) {
   try {
     const applications = await Instructor.find({
       papers_confirmed: false,
-    }).select("_id name ID CV Graduation_Certificate verified createdAt");
+    }).select(
+      "_id name ID CV Graduation_Certificate verified papers_confirmed rejected rejectComment createdAt updatedAt"
+    );
     console.log(applications);
     if (!applications) {
       return res.status(404).json("No applications found");
